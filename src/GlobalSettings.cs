@@ -74,9 +74,10 @@ namespace MapStudio.UI
         /// <returns></returns>
         public static GlobalSettings Load()
         {
-            if (!File.Exists(Path.Combine(Runtime.ExecutableDir, "ConfigGlobal.json"))) { new GlobalSettings().Save(); }
+            var configDir = Environment.GetEnvironmentVariable("ConfigDir")!;
+            if (!File.Exists(Path.Combine(configDir!, "ConfigGlobal.json"))) { new GlobalSettings().Save(); }
 
-            var config = JsonConvert.DeserializeObject<GlobalSettings>(File.ReadAllText(Path.Combine(Runtime.ExecutableDir, "ConfigGlobal.json")), new
+            var config = JsonConvert.DeserializeObject<GlobalSettings>(File.ReadAllText(Path.Combine(configDir, "ConfigGlobal.json")), new
                 JsonSerializerSettings()
             {
                 //If settings get added, don't alter the defaults
@@ -134,7 +135,8 @@ namespace MapStudio.UI
         /// </summary>
         public void Save()
         {
-            File.WriteAllText(Path.Combine(Runtime.ExecutableDir, "ConfigGlobal.json"), JsonConvert.SerializeObject(this, Formatting.Indented));
+            var configDir = Environment.GetEnvironmentVariable("ConfigDir")!;
+            File.WriteAllText(Path.Combine(configDir, "ConfigGlobal.json"), JsonConvert.SerializeObject(this, Formatting.Indented));
             ApplyConfiguration();
         }
 

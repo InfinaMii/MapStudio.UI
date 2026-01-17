@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 
@@ -29,6 +30,10 @@ namespace MapStudio.UI
         {
             if (recentList.Contains(recentFile))
                 return;
+            
+            
+            var configDir = Environment.GetEnvironmentVariable("ConfigDir")!;
+            filePath = Path.Combine(configDir, filePath);
 
             LoadRecentList(filePath, recentList); //load list from file
             if (!(recentList.Contains(recentFile))) //prevent duplication on recent list
@@ -42,7 +47,7 @@ namespace MapStudio.UI
             }
 
             //writing menu list to file
-            //create file called "Recent.txt" located on app folder
+            //create file called "Recent.txt" located in config folder
             StreamWriter stringToWrite =
             new StreamWriter(filePath);
             foreach (string item in recentList)
